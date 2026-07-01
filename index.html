@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Florilège">
+<meta name="theme-color" content="#495340">
+<link rel="apple-touch-icon" href="florilege-icon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="florilege-icon-512.png">
+<link rel="icon" type="image/png" sizes="180x180" href="florilege-icon.png">
+<!-- iOS launch / splash screens -->
+<link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-1290x2796.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-1320x2868.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-1206x2622.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-1179x2556.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-1284x2778.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-1170x2532.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-1125x2436.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-1242x2688.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash/splash-828x1792.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash/splash-750x1334.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash/splash-640x1136.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-1242x2208.png">
+<title>Florilège ― NAI Prompt Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FDF7F5; --cream-2:#F6EEEA; --paper:#FFFDFC;
+  --ink:#515D46; --ink-soft:#6E7A62; --ink-faint:#93A088;
+  --rose:#CB5457; --rose-deep:#A8434A; --rose-tint:#FBEBEA;
+  --sage:#E7EEE3; --sage-line:#C7D3BE;
+  --gold:#9C8F5E; --gold-line:#C9BF9B;
+  --line:#D9D0CA;
+  --shadow:0 8px 30px -14px rgba(81,93,70,.28);
+  --radius:10px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--cream); color:var(--ink);
+  font-family:"Zen Kaku Gothic New",-apple-system,sans-serif;
+  font-size:15px; line-height:1.7; -webkit-text-size-adjust:100%; padding:0 0 96px;
+}
+::selection{background:var(--rose-tint);}
+button{font-family:inherit;cursor:pointer;color:inherit;}
+input,textarea,select{font-family:inherit;color:var(--ink);}
+
+.masthead{
+  padding:34px 22px 24px;text-align:center;border-bottom:1px solid var(--line);
+  background:radial-gradient(120% 90% at 15% -10%, rgba(203,84,87,.06), transparent 60%),radial-gradient(120% 90% at 100% 0%, rgba(81,93,70,.06), transparent 55%);
+}
+.eyebrow{font-family:"Zen Kaku Gothic New";letter-spacing:.42em;font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;margin:0 0 10px;padding-left:.42em;}
+.wordmark{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:clamp(38px,10vw,58px);line-height:1;color:var(--rose);margin:0;letter-spacing:.01em;}
+.subtitle{font-family:"Shippori Mincho",serif;font-weight:500;font-size:13px;letter-spacing:.34em;color:var(--ink-soft);margin:12px 0 0;padding-left:.34em;}
+.sprig{width:64px;height:1px;background:var(--gold-line);margin:16px auto 0;position:relative;}
+.sprig::before,.sprig::after{content:"";position:absolute;top:-2px;width:5px;height:5px;border-radius:50%;background:var(--rose);}
+.sprig::before{left:-4px;}.sprig::after{right:-4px;}
+
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px;}
+.toolbar{padding:22px 0 6px;display:flex;flex-direction:column;gap:13px;}
+.searchrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.search{flex:1 1 240px;position:relative;min-width:200px;}
+.search input{width:100%;padding:12px 14px 12px 40px;border:1px solid var(--line);background:var(--paper);border-radius:var(--radius);font-size:15px;outline:none;transition:border-color .18s,box-shadow .18s;}
+.search input:focus{border-color:var(--rose);box-shadow:0 0 0 3px var(--rose-tint);}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--ink-faint);}
+.btn{border:1px solid var(--line);background:var(--paper);padding:11px 16px;border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--ink);white-space:nowrap;transition:background .16s,border-color .16s,transform .06s;}
+.btn:hover{background:var(--cream-2);border-color:var(--gold-line);}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--rose);border-color:var(--rose);color:#fff;}
+.btn-primary:hover{background:var(--rose-deep);border-color:var(--rose-deep);}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--ink-soft);padding:11px 10px;}
+.btn-ghost:hover{background:var(--cream-2);}
+
+.folderbar{display:flex;gap:8px;align-items:center;overflow-x:auto;padding:2px 0 6px;-webkit-overflow-scrolling:touch;}
+.folderbar::-webkit-scrollbar{height:0;}
+.fchip{border:1px solid var(--gold-line);background:var(--paper);color:var(--ink-soft);padding:6px 13px;border-radius:8px;font-size:12.5px;font-weight:500;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all .15s;flex-shrink:0;}
+.fchip:hover{background:var(--cream-2);}
+.fchip.on{background:var(--gold);border-color:var(--gold);color:#fff;}
+.fchip .cnt{font-size:10.5px;opacity:.7;}
+.fmanage{border:1px dashed var(--gold-line);background:transparent;color:var(--gold);padding:6px 12px;border-radius:8px;font-size:12.5px;white-space:nowrap;flex-shrink:0;}
+.fmanage:hover{background:var(--cream-2);}
+
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.chip{border:1px solid var(--sage-line);background:var(--sage);color:var(--ink);padding:6px 13px;border-radius:999px;font-size:12.5px;font-weight:500;transition:all .15s;line-height:1.4;}
+.chip:hover{border-color:var(--ink-soft);}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff;}
+.chip.tagchip{background:var(--paper);border-color:var(--line);color:var(--ink-soft);}
+.chip.tagchip.on{background:var(--rose);border-color:var(--rose);color:#fff;}
+.chip.favchip.on{background:var(--rose);border-color:var(--rose);color:#fff;}
+.divider-v{width:1px;height:20px;background:var(--line);margin:0 2px;}
+.metaline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;color:var(--ink-faint);font-size:12px;letter-spacing:.06em;padding:2px 0 0;}
+.sortsel{border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:6px 10px;font-size:12.5px;color:var(--ink-soft);}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;padding:22px 0 40px;}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;position:relative;transition:box-shadow .2s,transform .2s,border-color .2s;cursor:pointer;}
+.card:hover{box-shadow:var(--shadow);transform:translateY(-3px);border-color:var(--gold-line);}
+.thumb{aspect-ratio:3/4;background:var(--sage);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.thumb .noimg{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:15px;color:var(--ink-faint);letter-spacing:.05em;}
+.badge{position:absolute;top:10px;left:10px;font-size:10.5px;font-weight:700;letter-spacing:.1em;padding:4px 9px;border-radius:4px;text-transform:uppercase;backdrop-filter:blur(4px);display:flex;gap:5px;align-items:center;}
+.badge.base{background:rgba(81,93,70,.9);color:#fff;}
+.badge.character{background:rgba(203,84,87,.92);color:#fff;}
+.badge .pair{background:rgba(255,255,255,.28);border-radius:3px;padding:0 4px;font-size:9.5px;}
+.fav-btn{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,253,252,.86);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;color:var(--ink-faint);transition:transform .12s,color .12s;z-index:2;}
+.fav-btn:hover{transform:scale(1.12);}
+.fav-btn.on{color:var(--rose);}
+.card-body{padding:13px 14px 15px;display:flex;flex-direction:column;gap:8px;flex:1;}
+.card-title{font-family:"Shippori Mincho",serif;font-weight:600;font-size:15.5px;line-height:1.4;margin:0;color:var(--ink);}
+.stars{display:flex;gap:2px;color:var(--gold);font-size:13px;letter-spacing:1px;}
+.stars .off{color:var(--line);}
+.card-tags{display:flex;gap:5px;flex-wrap:wrap;}
+.tag{font-size:11px;color:var(--ink-soft);background:var(--cream-2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;}
+.tag.folder{color:var(--gold);border-color:var(--gold-line);background:transparent;}
+.preview{font-family:"JetBrains Mono",monospace;font-size:11.5px;line-height:1.55;color:var(--ink-soft);background:var(--cream);border:1px solid var(--line);border-radius:7px;padding:8px 10px;max-height:56px;overflow:hidden;position:relative;}
+.preview::after{content:"";position:absolute;inset:auto 0 0 0;height:18px;background:linear-gradient(transparent,var(--cream));}
+.card-foot{display:flex;gap:6px;margin-top:auto;padding-top:4px;flex-wrap:wrap;}
+.copybtn{flex:1;border:1px solid var(--rose);background:var(--rose-tint);color:var(--rose-deep);border-radius:8px;padding:8px;font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .14s;min-width:0;}
+.copybtn:hover{background:var(--rose);color:#fff;}
+.copybtn.mini{flex:1 1 40px;padding:7px 6px;font-size:12px;}
+
+.empty{grid-column:1/-1;text-align:center;padding:70px 20px;color:var(--ink-faint);}
+.empty .frame{max-width:460px;margin:0 auto;}
+.empty h3{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:600;font-size:26px;color:var(--rose);margin:0 0 8px;}
+.empty p{margin:6px 0 20px;font-size:14px;line-height:1.8;color:var(--ink-soft);}
+.frame{position:relative;border:1px solid var(--gold-line);border-radius:8px;padding:26px 24px;background:var(--paper);}
+.frame::before{content:"";position:absolute;inset:4px;border:1px solid var(--gold-line);border-radius:5px;pointer-events:none;opacity:.6;}
+
+.overlay{position:fixed;inset:0;background:rgba(60,66,52,.42);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding:28px 16px;z-index:50;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .2s;}
+.overlay.open{opacity:1;pointer-events:auto;}
+.modal{background:var(--cream);border-radius:14px;max-width:640px;width:100%;box-shadow:0 24px 70px -20px rgba(50,56,44,.5);border:1px solid var(--line);transform:translateY(12px);transition:transform .22s;overflow:hidden;}
+.overlay.open .modal{transform:translateY(0);}
+.modal.sm{max-width:440px;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line);background:var(--paper);}
+.modal-head h2{font-family:"Shippori Mincho",serif;font-weight:600;font-size:17px;margin:0;letter-spacing:.04em;}
+.xbtn{width:34px;height:34px;border:none;background:transparent;border-radius:8px;font-size:20px;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;}
+.xbtn:hover{background:var(--cream-2);}
+.modal-body{padding:20px 22px;display:flex;flex-direction:column;gap:16px;max-height:70vh;overflow-y:auto;}
+.field label{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--ink-soft);margin:0 0 6px;text-transform:uppercase;}
+.field .hint{font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink-faint);font-size:11px;}
+.field input[type=text],.field textarea,.field select{width:100%;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 12px;font-size:14px;outline:none;transition:border-color .16s,box-shadow .16s;}
+.field textarea{resize:vertical;min-height:74px;font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.6;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--rose);box-shadow:0 0 0 3px var(--rose-tint);}
+.row2{display:flex;gap:14px;flex-wrap:wrap;}
+.row2>*{flex:1;min-width:150px;}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+.seg button{flex:1;border:none;background:var(--paper);padding:10px;font-size:13px;font-weight:600;color:var(--ink-soft);transition:background .14s;}
+.seg button.on{color:#fff;}
+.seg button.on[data-t="base"]{background:var(--ink);}
+.seg button.on[data-t="character"]{background:var(--rose);}
+.rate{display:flex;gap:4px;font-size:24px;color:var(--line);}
+.rate span{cursor:pointer;transition:transform .1s,color .1s;}
+.rate span:hover{transform:scale(1.15);}
+.rate span.on{color:var(--gold);}
+.imgpick{display:flex;gap:14px;align-items:center;}
+.imgprev{width:78px;height:104px;border-radius:8px;border:1px solid var(--line);background:var(--sage);object-fit:cover;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-faint);overflow:hidden;}
+.imgprev img{width:100%;height:100%;object-fit:cover;}
+.favtoggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);cursor:pointer;user-select:none;padding-top:2px;}
+.favtoggle .heart{font-size:20px;color:var(--line);transition:color .14s,transform .12s;}
+.favtoggle.on .heart{color:var(--rose);transform:scale(1.1);}
+.foldersel-row{display:flex;gap:8px;align-items:flex-end;}
+.foldersel-row select{flex:1;}
+.modal-foot{display:flex;gap:10px;padding:16px 22px;border-top:1px solid var(--line);background:var(--paper);}
+.modal-foot .btn{flex:1;}
+.del{color:var(--rose-deep);border-color:var(--rose-tint);background:var(--rose-tint);flex:0 0 auto!important;}
+.del:hover{background:var(--rose);color:#fff;border-color:var(--rose);}
+
+/* character slots */
+.charslot{border:1px solid var(--sage-line);background:var(--sage);border-radius:9px;padding:12px;display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
+.charslot-head{display:flex;align-items:center;justify-content:space-between;}
+.slotnum{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--rose-deep);display:flex;align-items:center;gap:6px;}
+.slotnum .dot{font-size:15px;}
+.slot-del{border:none;background:transparent;color:var(--ink-faint);font-size:18px;width:26px;height:26px;border-radius:6px;}
+.slot-del:hover{background:rgba(203,84,87,.12);color:var(--rose-deep);}
+.charslot input,.charslot textarea{background:var(--paper);}
+.addchar{border:1px dashed var(--rose);background:var(--rose-tint);color:var(--rose-deep);border-radius:8px;padding:9px;font-size:13px;font-weight:600;width:100%;}
+.addchar:hover{background:var(--rose);color:#fff;}
+.addchar:disabled{opacity:.4;cursor:default;background:var(--cream-2);color:var(--ink-faint);border-color:var(--line);}
+
+.copyrow{display:flex;gap:8px;flex-wrap:wrap;}
+.copyrow .btn{flex:1;font-size:13px;}
+.detail-slot{border:1px solid var(--line);border-radius:9px;padding:12px;background:var(--paper);display:flex;flex-direction:column;gap:8px;}
+.detail-slot .sname{font-size:12.5px;font-weight:700;color:var(--rose-deep);display:flex;align-items:center;gap:6px;}
+
+/* folder manager */
+.folist{display:flex;flex-direction:column;gap:8px;}
+.foitem{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:9px 12px;background:var(--paper);}
+.foitem .fname{flex:1;font-weight:500;font-size:14px;}
+.foitem .fcnt{font-size:11px;color:var(--ink-faint);}
+.foitem button{border:none;background:transparent;color:var(--ink-soft);font-size:13px;padding:4px 8px;border-radius:6px;}
+.foitem button:hover{background:var(--cream-2);}
+.foitem button.rm:hover{background:var(--rose-tint);color:var(--rose-deep);}
+.foadd{display:flex;gap:8px;}
+.foadd input{flex:1;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;outline:none;background:var(--paper);}
+.foadd input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--cream-2);}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 22px;border-radius:999px;font-size:13.5px;font-weight:500;box-shadow:0 10px 30px -8px rgba(50,56,44,.5);opacity:0;pointer-events:none;transition:all .25s;z-index:80;letter-spacing:.03em;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.fab{position:fixed;right:20px;bottom:22px;z-index:40;background:var(--rose);color:#fff;border:none;border-radius:999px;padding:14px 22px;font-size:15px;font-weight:700;letter-spacing:.04em;box-shadow:0 12px 30px -8px rgba(168,67,74,.55);display:flex;align-items:center;gap:8px;transition:transform .12s,background .16s;}
+.fab:hover{background:var(--rose-deep);}
+.fab:active{transform:scale(.96);}
+
+@media (max-width:560px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .preview{display:none;}
+  .modal-body{max-height:64vh;}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="eyebrow">NovelAI Prompt Archive</p>
+  <h1 class="wordmark">Florilège</h1>
+  <p class="subtitle">プロンプト標本室</p>
+  <div class="sprig"></div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="searchrow">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="search" type="text" placeholder="プロンプト・タグ・タイトルを検索" autocomplete="off">
+      </div>
+      <button class="btn" id="importBtn">読み込み</button>
+      <button class="btn" id="exportBtn">書き出し</button>
+    </div>
+
+    <div class="folderbar" id="folderbar"></div>
+
+    <div class="filters" id="typeFilters">
+      <button class="chip on" data-type="all">すべて</button>
+      <button class="chip" data-type="base">ベース</button>
+      <button class="chip" data-type="character">キャラ</button>
+      <button class="chip favchip" data-fav="1">★ お気に入り</button>
+      <span class="divider-v"></span>
+      <span id="tagFilters" style="display:flex;gap:8px;flex-wrap:wrap;"></span>
+    </div>
+
+    <div class="metaline">
+      <span id="count">0 件</span>
+      <select class="sortsel" id="sort">
+        <option value="new">新しい順</option>
+        <option value="old">古い順</option>
+        <option value="rate">評価が高い順</option>
+        <option value="name">名前順</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</div>
+
+<button class="fab" id="addFab">＋ 新規登録</button>
+
+<!-- ===== editor modal ===== -->
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h2 id="modalTitle">新規登録</h2>
+      <button class="xbtn" id="closeModal" aria-label="閉じる">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>種別</label>
+        <div class="seg" id="typeSeg">
+          <button data-t="base" class="on">ベース（背景・画風・全体）</button>
+          <button data-t="character">キャラクター</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>タイトル <span class="hint">― なんのイラストか一目でわかる名前</span></label>
+        <input type="text" id="fTitle" placeholder="例：月夜の教会 / ラヴェル×ルカ ペア">
+      </div>
+
+      <!-- base block -->
+      <div id="baseBlock">
+        <div class="field">
+          <label>プロンプト <span class="hint">― NAIのメイン欄にそのまま貼れる本文</span></label>
+          <textarea id="fPrompt" placeholder="masterpiece, best quality, ..."></textarea>
+        </div>
+        <div class="field">
+          <label>Undesired Content <span class="hint">― ネガティブ（任意）</span></label>
+          <textarea id="fUC" placeholder="lowres, bad anatomy, ..." style="min-height:56px;"></textarea>
+        </div>
+      </div>
+
+      <!-- character block -->
+      <div id="charBlock" style="display:none;">
+        <div class="field">
+          <label>キャラ枠 <span class="hint">― 同じ画角に入るキャラごとに1枠。NAIのキャラ欄①②…に対応</span></label>
+          <div id="charList"></div>
+          <button class="addchar" id="addChar">＋ キャラ枠を追加</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>タグ <span class="hint">― カンマ区切り</span></label>
+        <input type="text" id="fTags" placeholder="ゴシック, 夜, ペア, V4.5">
+      </div>
+      <div class="field">
+        <label>フォルダ</label>
+        <div class="foldersel-row">
+          <select id="fFolder"><option value="">（未分類）</option></select>
+          <button class="btn" id="newFolderInline" type="button" style="flex:0 0 auto;">＋新規</button>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>評価</label>
+          <div class="rate" id="fRate" data-v="0">
+            <span data-n="1">★</span><span data-n="2">★</span><span data-n="3">★</span><span data-n="4">★</span><span data-n="5">★</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>お気に入り</label>
+          <div class="favtoggle" id="fFav"><span class="heart">♥</span><span class="lbl">登録する</span></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>サムネイル画像 <span class="hint">― 自動で縮小保存</span></label>
+        <div class="imgpick">
+          <div class="imgprev" id="imgPrev">なし</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button class="btn" id="pickImg">画像を選ぶ</button>
+            <button class="btn btn-ghost" id="clearImg" style="font-size:12px;">画像を外す</button>
+          </div>
+          <input type="file" id="imgInput" accept="image/*" hidden>
+        </div>
+      </div>
+      <div class="field">
+        <label>メモ <span class="hint">― モデル・LoRA・seed・設定など（任意）</span></label>
+        <textarea id="fMemo" placeholder="NAI V4.5 / LoRA: lilium_m01_noir @0.8 / steps 28, CFG 5" style="min-height:52px;"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn del" id="delBtn" style="display:none;">削除</button>
+      <button class="btn" id="cancelBtn">キャンセル</button>
+      <button class="btn btn-primary" id="saveBtn">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== detail modal ===== -->
+<div class="overlay" id="detailOverlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h2 id="dTitle">―</h2>
+      <button class="xbtn" id="closeDetail" aria-label="閉じる">×</button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+    <div class="modal-foot">
+      <button class="btn" id="editFromDetail">編集</button>
+      <button class="btn btn-primary" id="doneDetail">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== folder manager ===== -->
+<div class="overlay" id="folderOverlay">
+  <div class="modal sm" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h2>フォルダ管理</h2>
+      <button class="xbtn" id="closeFolder" aria-label="閉じる">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="foadd">
+        <input type="text" id="newFolderName" placeholder="新しいフォルダ名（例：コスプレ部）">
+        <button class="btn btn-primary" id="createFolder" style="flex:0 0 auto;">作成</button>
+      </div>
+      <div class="folist" id="folderList"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" id="doneFolder">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="importInput" accept="application/json" hidden>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   Florilège v2 — NAI Prompt Archive
+   IndexedDB stores: prompts, folders. Records may hold base64 thumbs.
+   ============================================================ */
+const DB_NAME="florilege_db", P_STORE="prompts", F_STORE="folders", DB_VER=2;
+const CIRCLED=["①","②","③","④","⑤"];
+const MAX_SLOTS=5;
+let db=null, PROMPTS=[], FOLDERS=[], editingId=null;
+let draft={type:"base",rate:0,fav:false,image:null,chars:[{name:"",prompt:""}]};
+
+/* ---------- IndexedDB ---------- */
+function openDB(){
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open(DB_NAME,DB_VER);
+    req.onupgradeneeded=e=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains(P_STORE)) d.createObjectStore(P_STORE,{keyPath:"id"});
+      if(!d.objectStoreNames.contains(F_STORE)) d.createObjectStore(F_STORE,{keyPath:"id"});
+    };
+    req.onsuccess=e=>res(e.target.result);
+    req.onerror=e=>rej(e.target.error);
+  });
+}
+function store(name,mode){return db.transaction(name,mode).objectStore(name);}
+function getAll(name){return new Promise((res,rej)=>{const r=store(name,"readonly").getAll();r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error);});}
+function put(name,rec){return new Promise((res,rej)=>{const r=store(name,"readwrite").put(rec);r.onsuccess=()=>res();r.onerror=()=>rej(r.error);});}
+function del(name,id){return new Promise((res,rej)=>{const r=store(name,"readwrite").delete(id);r.onsuccess=()=>res();r.onerror=()=>rej(r.error);});}
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc=s=>(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1700);}
+function folderName(id){const f=FOLDERS.find(x=>x.id===id);return f?f.name:"";}
+
+function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(()=>toast("コピーしました")).catch(()=>fallbackCopy(text));
+  } else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand("copy");toast("コピーしました");}catch(e){toast("コピーできませんでした");}
+  document.body.removeChild(ta);
+}
+function resizeImage(file,max=520,q=.82){
+  return new Promise((res,rej)=>{
+    const fr=new FileReader();
+    fr.onload=()=>{const img=new Image();
+      img.onload=()=>{let{width:w,height:h}=img;
+        if(w>h && w>max){h=h*max/w;w=max;}else if(h>=w && h>max){w=w*max/h;h=max;}
+        const c=document.createElement("canvas");c.width=w;c.height=h;
+        const ctx=c.getContext("2d");ctx.fillStyle="#FDF7F5";ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
+        res(c.toDataURL("image/jpeg",q));};
+      img.onerror=rej;img.src=fr.result;};
+    fr.onerror=rej;fr.readAsDataURL(file);
+  });
+}
+function starsHTML(n){let s="";for(let i=1;i<=5;i++)s+=`<span class="${i<=n?'':'off'}">★</span>`;return s;}
+
+/* normalize legacy / imported records */
+function normalize(raw){
+  const type=raw.type==="character"?"character":"base";
+  let chars=Array.isArray(raw.chars)?raw.chars.map(c=>({name:c.name||"",prompt:c.prompt||""})):null;
+  if(type==="character" && !chars) chars=[{name:"",prompt:raw.prompt||""}];
+  return{
+    id:raw.id||uid(),type,title:raw.title||"",
+    prompt:raw.prompt||"",uc:raw.uc||"",chars:chars||[{name:"",prompt:""}],
+    tags:Array.isArray(raw.tags)?raw.tags:[],rate:+raw.rate||0,fav:!!raw.fav,
+    image:raw.image||null,memo:raw.memo||"",folder:raw.folder||null,
+    created:raw.created||Date.now(),updated:raw.updated||Date.now()
+  };
+}
+/* text used for preview + search */
+function bodyText(p){return p.type==="character"?(p.chars||[]).map(c=>c.prompt).filter(Boolean).join("  /  "):(p.prompt||"");}
+function searchText(p){return[p.title,bodyText(p),(p.tags||[]).join(" "),p.memo,(p.chars||[]).map(c=>c.name).join(" "),folderName(p.folder)].join(" ").toLowerCase();}
+
+/* ---------- filters ---------- */
+let F={search:"",type:"all",fav:false,tag:"",folder:"all",sort:"new"};
+
+function allTags(){const set=new Set();PROMPTS.forEach(p=>(p.tags||[]).forEach(t=>set.add(t)));return[...set].sort((a,b)=>a.localeCompare(b,"ja"));}
+function renderTagFilters(){
+  const box=$("tagFilters");
+  box.innerHTML=allTags().map(t=>`<button class="chip tagchip ${F.tag===t?'on':''}" data-tag="${esc(t)}">${esc(t)}</button>`).join("");
+  box.querySelectorAll("[data-tag]").forEach(b=>b.onclick=()=>{F.tag=(F.tag===b.dataset.tag)?"":b.dataset.tag;renderTagFilters();render();});
+}
+function folderCount(id){return PROMPTS.filter(p=>p.folder===id).length;}
+function renderFolderBar(){
+  const bar=$("folderbar");
+  let html=`<button class="fchip ${F.folder==='all'?'on':''}" data-f="all">すべて</button>`;
+  const unfiled=PROMPTS.filter(p=>!p.folder).length;
+  html+=`<button class="fchip ${F.folder==='none'?'on':''}" data-f="none">未分類 <span class="cnt">${unfiled}</span></button>`;
+  FOLDERS.forEach(f=>{html+=`<button class="fchip ${F.folder===f.id?'on':''}" data-f="${f.id}">📁 ${esc(f.name)} <span class="cnt">${folderCount(f.id)}</span></button>`;});
+  html+=`<button class="fmanage" id="manageFolders">⚙ フォルダ管理</button>`;
+  bar.innerHTML=html;
+  bar.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{F.folder=b.dataset.f;renderFolderBar();render();});
+  $("manageFolders").onclick=openFolderManager;
+}
+
+function filtered(){
+  let list=PROMPTS.slice();
+  if(F.type!=="all") list=list.filter(p=>p.type===F.type);
+  if(F.fav) list=list.filter(p=>p.fav);
+  if(F.tag) list=list.filter(p=>(p.tags||[]).includes(F.tag));
+  if(F.folder==="none") list=list.filter(p=>!p.folder);
+  else if(F.folder!=="all") list=list.filter(p=>p.folder===F.folder);
+  if(F.search){const q=F.search.toLowerCase();list=list.filter(p=>searchText(p).includes(q));}
+  const s=F.sort;
+  list.sort((a,b)=>{
+    if(s==="new")return b.updated-a.updated;
+    if(s==="old")return a.updated-b.updated;
+    if(s==="rate")return (b.rate-a.rate)||(b.updated-a.updated);
+    if(s==="name")return (a.title||"").localeCompare(b.title||"","ja");
+  });
+  return list;
+}
+
+function copyButtonsHTML(p){
+  if(p.type==="character"){
+    const cs=(p.chars||[]).filter(c=>c.prompt);
+    if(cs.length>1){
+      return cs.map((c,i)=>`<button class="copybtn mini" data-copy-slot="${p.id}:${i}" title="${esc(c.name||('キャラ'+(i+1)))}">${CIRCLED[i]||('#'+(i+1))} コピー</button>`).join("");
+    }
+    return `<button class="copybtn" data-copy-id="${p.id}">⧉ プロンプトをコピー</button>`;
+  }
+  return `<button class="copybtn" data-copy-id="${p.id}">⧉ プロンプトをコピー</button>`;
+}
+
+function render(){
+  const list=filtered();
+  $("count").textContent=`${list.length} 件`+(PROMPTS.length!==list.length?` / 全${PROMPTS.length}件`:"");
+  const grid=$("grid");
+  if(!PROMPTS.length){
+    grid.innerHTML=`<div class="empty"><div class="frame"><h3>Empty herbarium</h3><p>まだ標本がありません。<br>右下の「＋ 新規登録」から、いつものプロンプトを一つ押し花にしてみて。<br>iPhoneのメモからは「読み込み」でJSONを取り込めます。</p></div></div>`;return;
+  }
+  if(!list.length){grid.innerHTML=`<div class="empty"><div class="frame"><h3>No matches</h3><p>条件に合う標本が見つかりません。検索やフィルタを外してみて。</p></div></div>`;return;}
+  grid.innerHTML=list.map(p=>{
+    const pairBadge=(p.type==="character"&&(p.chars||[]).filter(c=>c.prompt).length>1)?`<span class="pair">×${(p.chars||[]).filter(c=>c.prompt).length}</span>`:"";
+    return `<div class="card" data-id="${p.id}">
+      <div class="thumb">
+        ${p.image?`<img src="${p.image}" alt="">`:`<span class="noimg">no image</span>`}
+        <span class="badge ${p.type}">${p.type==="base"?"BASE":"CHARACTER"}${pairBadge}</span>
+        <button class="fav-btn ${p.fav?'on':''}" data-fav-id="${p.id}" aria-label="お気に入り">♥</button>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">${esc(p.title)||"（無題）"}</h3>
+        <div class="stars">${starsHTML(p.rate)}</div>
+        ${(p.folder||(p.tags&&p.tags.length))?`<div class="card-tags">${p.folder?`<span class="tag folder">📁 ${esc(folderName(p.folder))}</span>`:""}${(p.tags||[]).slice(0,3).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>`:""}
+        <div class="preview">${esc(bodyText(p))}</div>
+        <div class="card-foot">${copyButtonsHTML(p)}</div>
+      </div>
+    </div>`;}).join("");
+
+  grid.querySelectorAll(".card").forEach(c=>{
+    c.onclick=e=>{if(e.target.closest("[data-copy-id]")||e.target.closest("[data-copy-slot]")||e.target.closest("[data-fav-id]"))return;openDetail(c.dataset.id);};
+  });
+  grid.querySelectorAll("[data-copy-id]").forEach(b=>b.onclick=e=>{e.stopPropagation();const p=PROMPTS.find(x=>x.id===b.dataset.copyId);if(p)copyText(p.type==="character"?((p.chars[0]||{}).prompt||""):(p.prompt||""));});
+  grid.querySelectorAll("[data-copy-slot]").forEach(b=>b.onclick=e=>{e.stopPropagation();const[id,i]=b.dataset.copySlot.split(":");const p=PROMPTS.find(x=>x.id===id);if(p&&p.chars[+i])copyText(p.chars[+i].prompt||"");});
+  grid.querySelectorAll("[data-fav-id]").forEach(b=>b.onclick=async e=>{e.stopPropagation();const p=PROMPTS.find(x=>x.id===b.dataset.favId);if(p){p.fav=!p.fav;p.updated=Date.now();await put(P_STORE,p);render();}});
+}
+
+/* ---------- detail ---------- */
+function openDetail(id){
+  const p=PROMPTS.find(x=>x.id===id);if(!p)return;
+  $("dTitle").textContent=p.title||"（無題）";
+  const body=$("detailBody");
+  let promptSection="";
+  if(p.type==="character"){
+    promptSection=(p.chars||[]).map((c,i)=>`
+      <div class="detail-slot">
+        <div class="sname">${CIRCLED[i]||('#'+(i+1))} ${esc(c.name)||("キャラ枠"+(i+1))}</div>
+        <div class="preview" style="max-height:none;font-size:12.5px;">${esc(c.prompt)}</div>
+        <button class="btn btn-primary" data-dcopy="${i}" style="font-size:13px;">⧉ このキャラ枠をコピー</button>
+      </div>`).join("");
+  }else{
+    promptSection=`<div class="field"><label>プロンプト</label><div class="preview" style="max-height:none;font-size:12.5px;">${esc(p.prompt)}</div>
+      <button class="btn btn-primary" data-dcopy="base" style="width:100%;margin-top:8px;font-size:13px;">⧉ プロンプトをコピー</button></div>
+      ${p.uc?`<div class="field"><label>Undesired Content</label><div class="preview" style="max-height:none;font-size:12.5px;">${esc(p.uc)}</div>
+      <button class="btn" data-dcopy="uc" style="width:100%;margin-top:8px;font-size:13px;">UCをコピー</button></div>`:""}`;
+  }
+  body.innerHTML=`
+    ${p.image?`<img src="${p.image}" style="width:100%;max-height:320px;object-fit:contain;border-radius:8px;border:1px solid var(--line);background:var(--sage);">`:""}
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span class="badge ${p.type}" style="position:static;">${p.type==="base"?"BASE":"CHARACTER"}</span>
+      <span class="stars">${starsHTML(p.rate)}</span>
+      ${p.fav?`<span style="color:var(--rose);font-size:18px;">♥</span>`:""}
+      ${p.folder?`<span class="tag folder">📁 ${esc(folderName(p.folder))}</span>`:""}
+    </div>
+    ${(p.tags&&p.tags.length)?`<div class="card-tags">${p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>`:""}
+    ${promptSection}
+    ${p.memo?`<div class="field"><label>メモ</label><div style="font-size:13px;color:var(--ink-soft);white-space:pre-wrap;">${esc(p.memo)}</div></div>`:""}`;
+  body.querySelectorAll("[data-dcopy]").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.dcopy;
+    if(k==="base")copyText(p.prompt||"");
+    else if(k==="uc")copyText(p.uc||"");
+    else copyText((p.chars[+k]||{}).prompt||"");
+  });
+  $("editFromDetail").onclick=()=>{closeOverlay("detailOverlay");openEditor(id);};
+  openOverlay("detailOverlay");
+}
+
+/* ---------- editor: character slots ---------- */
+function readSlotsFromDOM(){
+  const slots=[];
+  $("charList").querySelectorAll(".charslot").forEach(el=>{
+    slots.push({name:el.querySelector(".slot-name").value.trim(),prompt:el.querySelector(".slot-prompt").value});
+  });
+  return slots;
+}
+function renderSlots(){
+  const list=$("charList");
+  list.innerHTML=draft.chars.map((c,i)=>`
+    <div class="charslot" data-i="${i}">
+      <div class="charslot-head">
+        <span class="slotnum"><span class="dot">${CIRCLED[i]||('#'+(i+1))}</span> キャラ枠${i+1}</span>
+        ${draft.chars.length>1?`<button class="slot-del" data-del="${i}" aria-label="削除">×</button>`:""}
+      </div>
+      <input type="text" class="slot-name" placeholder="名前・役割（任意）例：ラヴェル" value="${esc(c.name)}">
+      <textarea class="slot-prompt" placeholder="1girl, silver hair, ...">${esc(c.prompt)}</textarea>
+    </div>`).join("");
+  list.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{draft.chars=readSlotsFromDOM();draft.chars.splice(+b.dataset.del,1);renderSlots();updateAddBtn();});
+  updateAddBtn();
+}
+function updateAddBtn(){$("addChar").disabled=($("charList").querySelectorAll(".charslot").length>=MAX_SLOTS);}
+
+function setType(t){
+  draft.type=t;
+  document.querySelectorAll("#typeSeg button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  $("baseBlock").style.display=(t==="base")?"":"none";
+  $("charBlock").style.display=(t==="character")?"":"none";
+  if(t==="character"&&!$("charList").children.length) renderSlots();
+}
+function setRate(n){draft.rate=n;$("fRate").dataset.v=n;$("fRate").querySelectorAll("span").forEach(s=>s.classList.toggle("on",+s.dataset.n<=n));}
+function setFav(v){draft.fav=v;$("fFav").classList.toggle("on",v);$("fFav").querySelector(".lbl").textContent=v?"登録済み":"登録する";}
+function setImg(data){draft.image=data;const pv=$("imgPrev");pv.innerHTML=data?`<img src="${data}">`:"なし";}
+function fillFolderSelect(sel){
+  const s=$("fFolder");
+  s.innerHTML=`<option value="">（未分類）</option>`+FOLDERS.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join("");
+  s.value=sel||"";
+}
+
+function openEditor(id){
+  editingId=id||null;
+  fillFolderSelect(id?(PROMPTS.find(x=>x.id===id)||{}).folder:"");
+  if(id){
+    const p=PROMPTS.find(x=>x.id===id);
+    $("modalTitle").textContent="標本を編集";$("delBtn").style.display="block";
+    $("fTitle").value=p.title||"";$("fPrompt").value=p.prompt||"";$("fUC").value=p.uc||"";
+    $("fTags").value=(p.tags||[]).join(", ");$("fMemo").value=p.memo||"";
+    draft.chars=(p.chars&&p.chars.length)?p.chars.map(c=>({name:c.name||"",prompt:c.prompt||""})):[{name:"",prompt:""}];
+    $("fFolder").value=p.folder||"";
+    setRate(p.rate||0);setFav(!!p.fav);setImg(p.image||null);
+    $("charList").innerHTML="";setType(p.type||"base");
+    if((p.type||"base")==="character")renderSlots();
+  }else{
+    $("modalTitle").textContent="新規登録";$("delBtn").style.display="none";
+    ["fTitle","fPrompt","fUC","fTags","fMemo"].forEach(f=>$(f).value="");
+    draft.chars=[{name:"",prompt:""}];$("charList").innerHTML="";
+    setRate(0);setFav(false);setImg(null);setType("base");
+  }
+  openOverlay("overlay");setTimeout(()=>$("fTitle").focus(),120);
+}
+
+async function saveEntry(){
+  const title=$("fTitle").value.trim();
+  const isChar=draft.type==="character";
+  let chars=[];
+  if(isChar){chars=readSlotsFromDOM().filter(c=>c.prompt.trim()||c.name.trim());if(!chars.length)chars=[{name:"",prompt:""}];}
+  const prompt=$("fPrompt").value.trim();
+  if(!title && !prompt && !(isChar&&chars.some(c=>c.prompt.trim()))){toast("プロンプトかタイトルを入れてね");return;}
+  const tags=$("fTags").value.split(",").map(t=>t.trim()).filter(Boolean);
+  const now=Date.now();
+  let rec;
+  if(editingId){rec=PROMPTS.find(x=>x.id===editingId);}
+  else{rec={id:uid(),created:now};PROMPTS.push(rec);}
+  Object.assign(rec,{
+    type:draft.type,title,
+    prompt:isChar?"":prompt,uc:isChar?"":$("fUC").value.trim(),
+    chars:isChar?chars:[],
+    tags,folder:$("fFolder").value||null,
+    rate:draft.rate,fav:draft.fav,image:draft.image,memo:$("fMemo").value.trim(),updated:now
+  });
+  await put(P_STORE,rec);
+  closeOverlay("overlay");renderTagFilters();renderFolderBar();render();
+  toast(editingId?"更新しました":"標本を追加しました");
+}
+async function deleteEntry(){
+  if(!editingId)return;if(!confirm("この標本を削除しますか？"))return;
+  await del(P_STORE,editingId);PROMPTS=PROMPTS.filter(x=>x.id!==editingId);
+  closeOverlay("overlay");renderTagFilters();renderFolderBar();render();toast("削除しました");
+}
+
+/* ---------- folders ---------- */
+function openFolderManager(){renderFolderList();openOverlay("folderOverlay");}
+function renderFolderList(){
+  const list=$("folderList");
+  if(!FOLDERS.length){list.innerHTML=`<p style="color:var(--ink-faint);font-size:13px;text-align:center;padding:10px 0;">まだフォルダがありません。</p>`;return;}
+  list.innerHTML=FOLDERS.map(f=>`
+    <div class="foitem" data-id="${f.id}">
+      <span class="fname">📁 ${esc(f.name)}</span>
+      <span class="fcnt">${folderCount(f.id)}件</span>
+      <button data-ren="${f.id}">名前変更</button>
+      <button class="rm" data-rm="${f.id}">削除</button>
+    </div>`).join("");
+  list.querySelectorAll("[data-ren]").forEach(b=>b.onclick=async()=>{
+    const f=FOLDERS.find(x=>x.id===b.dataset.ren);const name=prompt("フォルダ名",f.name);
+    if(name&&name.trim()){f.name=name.trim();await put(F_STORE,f);renderFolderList();renderFolderBar();render();}
+  });
+  list.querySelectorAll("[data-rm]").forEach(b=>b.onclick=async()=>{
+    const f=FOLDERS.find(x=>x.id===b.dataset.rm);
+    if(!confirm(`フォルダ「${f.name}」を削除しますか？\n中の標本は削除されず「未分類」に戻ります。`))return;
+    for(const p of PROMPTS.filter(p=>p.folder===f.id)){p.folder=null;await put(P_STORE,p);}
+    await del(F_STORE,f.id);FOLDERS=FOLDERS.filter(x=>x.id!==f.id);
+    if(F.folder===f.id)F.folder="all";
+    renderFolderList();renderFolderBar();render();toast("フォルダを削除しました");
+  });
+}
+async function createFolder(name){
+  name=(name||"").trim();if(!name)return null;
+  const f={id:uid(),name,created:Date.now()};FOLDERS.push(f);await put(F_STORE,f);
+  renderFolderBar();return f;
+}
+
+/* ---------- export / import ---------- */
+function exportJSON(){
+  if(!PROMPTS.length){toast("書き出す標本がありません");return;}
+  const data={app:"florilege",version:2,exported:new Date().toISOString(),folders:FOLDERS,prompts:PROMPTS};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");
+  const d=new Date();const stamp=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
+  a.href=url;a.download=`florilege_backup_${stamp}.json`;a.click();URL.revokeObjectURL(url);
+  toast(`${PROMPTS.length}件を書き出しました`);
+}
+async function importJSON(file){
+  try{
+    const data=JSON.parse(await file.text());
+    const incoming=Array.isArray(data)?data:(data.prompts||[]);
+    const incFolders=(data&&Array.isArray(data.folders))?data.folders:[];
+    if(!incoming.length&&!incFolders.length){toast("読み込める標本がありませんでした");return;}
+    const fExist=new Set(FOLDERS.map(f=>f.id));
+    for(const f of incFolders){if(f&&f.id&&!fExist.has(f.id)){const rec={id:f.id,name:f.name||"（無名）",created:f.created||Date.now()};FOLDERS.push(rec);await put(F_STORE,rec);fExist.add(f.id);}}
+    const pExist=new Set(PROMPTS.map(p=>p.id));let added=0;
+    for(const raw of incoming){
+      const rec=normalize(raw);
+      if(pExist.has(rec.id))rec.id=uid();
+      if(rec.folder&&!fExist.has(rec.folder))rec.folder=null;
+      await put(P_STORE,rec);PROMPTS.push(rec);pExist.add(rec.id);added++;
+    }
+    renderTagFilters();renderFolderBar();render();toast(`${added}件を読み込みました`);
+  }catch(e){toast("JSONの読み込みに失敗しました");}
+}
+
+/* ---------- overlay utils ---------- */
+function openOverlay(id){$(id).classList.add("open");document.body.style.overflow="hidden";}
+function closeOverlay(id){$(id).classList.remove("open");if(!document.querySelector(".overlay.open"))document.body.style.overflow="";}
+
+/* ---------- wire up ---------- */
+function bind(){
+  $("search").oninput=e=>{F.search=e.target.value;render();};
+  $("sort").onchange=e=>{F.sort=e.target.value;render();};
+  document.querySelectorAll("#typeFilters [data-type]").forEach(b=>b.onclick=()=>{F.type=b.dataset.type;document.querySelectorAll("#typeFilters [data-type]").forEach(x=>x.classList.toggle("on",x===b));render();});
+  const favChip=document.querySelector("[data-fav]");
+  favChip.onclick=()=>{F.fav=!F.fav;favChip.classList.toggle("on",F.fav);render();};
+
+  $("addFab").onclick=()=>openEditor(null);
+  $("closeModal").onclick=$("cancelBtn").onclick=()=>closeOverlay("overlay");
+  $("saveBtn").onclick=saveEntry;$("delBtn").onclick=deleteEntry;
+  document.querySelectorAll("#typeSeg button").forEach(b=>b.onclick=()=>{if(draft.type==="character")draft.chars=readSlotsFromDOM();setType(b.dataset.t);});
+  $("addChar").onclick=()=>{draft.chars=readSlotsFromDOM();if(draft.chars.length<MAX_SLOTS){draft.chars.push({name:"",prompt:""});renderSlots();}};
+  $("fRate").querySelectorAll("span").forEach(s=>s.onclick=()=>setRate(+s.dataset.n===draft.rate?0:+s.dataset.n));
+  $("fFav").onclick=()=>setFav(!draft.fav);
+  $("pickImg").onclick=()=>$("imgInput").click();
+  $("clearImg").onclick=()=>setImg(null);
+  $("imgInput").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{setImg(await resizeImage(f));}catch(err){toast("画像を読み込めませんでした");}e.target.value="";};
+  $("newFolderInline").onclick=async()=>{const name=prompt("新しいフォルダ名");if(name&&name.trim()){const f=await createFolder(name);fillFolderSelect(f.id);}};
+
+  $("closeDetail").onclick=$("doneDetail").onclick=()=>closeOverlay("detailOverlay");
+
+  $("closeFolder").onclick=$("doneFolder").onclick=()=>closeOverlay("folderOverlay");
+  $("createFolder").onclick=async()=>{const inp=$("newFolderName");const name=inp.value.trim();if(!name){toast("フォルダ名を入れてね");return;}await createFolder(name);inp.value="";renderFolderList();render();toast("フォルダを作成しました");};
+  $("newFolderName").addEventListener("keydown",e=>{if(e.key==="Enter")$("createFolder").click();});
+
+  $("exportBtn").onclick=exportJSON;
+  $("importBtn").onclick=()=>$("importInput").click();
+  $("importInput").onchange=e=>{const f=e.target.files[0];if(f)importJSON(f);e.target.value="";};
+
+  document.querySelectorAll(".overlay").forEach(o=>o.onclick=e=>{if(e.target===o)closeOverlay(o.id);});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".overlay.open").forEach(o=>closeOverlay(o.id));});
+}
+
+/* ---------- boot ---------- */
+(async function(){
+  bind();
+  try{
+    db=await openDB();
+    const rawP=await getAll(P_STORE);
+    PROMPTS=rawP.map(normalize);
+    FOLDERS=(await getAll(F_STORE)).sort((a,b)=>(a.created||0)-(b.created||0));
+  }catch(e){
+    toast("保存領域を開けませんでした");
+    $("grid").innerHTML=`<div class="empty"><div class="frame"><h3>Storage unavailable</h3><p>このブラウザ／表示方法ではデータ保存が使えません。<br>GitHub Pages などhttpsのURLで開くと保存できます。</p></div></div>`;return;
+  }
+  renderTagFilters();renderFolderBar();render();
+})();
+</script>
+</body>
+</html>
