@@ -178,6 +178,13 @@ input,textarea,select{font-family:inherit;color:var(--ink);}
 .charslot input,.charslot textarea{background:var(--paper);}
 .addchar{border:1px dashed var(--rose);background:var(--rose-tint);color:var(--rose-deep);border-radius:8px;padding:9px;font-size:13px;font-weight:600;width:100%;}
 .addchar:hover{background:var(--rose);color:#fff;}
+.inlinecopy{width:100%;margin-top:8px;font-size:12.5px;padding:8px;background:var(--rose-tint);border-color:var(--rose);color:var(--rose-deep);font-weight:600;}
+.inlinecopy:hover{background:var(--rose);color:#fff;border-color:var(--rose);}
+.slotcopy{display:flex;gap:6px;margin-top:2px;}
+.slotcopy button{flex:1;border:1px solid var(--rose);background:var(--paper);color:var(--rose-deep);border-radius:7px;padding:7px 6px;font-size:11.5px;font-weight:600;transition:background .14s;}
+.slotcopy button:hover{background:var(--rose);color:#fff;}
+.slotlabel{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--ink-soft);margin:4px 0 -2px;}
+.basefield{border-top:1px solid var(--line);padding-top:14px;margin-top:4px;}
 .addchar:disabled{opacity:.4;cursor:default;background:var(--cream-2);color:var(--ink-faint);border-color:var(--line);}
 
 .copyrow{display:flex;gap:8px;flex-wrap:wrap;}
@@ -296,6 +303,14 @@ input,textarea,select{font-family:inherit;color:var(--ink);}
           <label>キャラ枠 <span class="hint">― 同じ画角に入るキャラごとに1枠。NAIのキャラ欄①②…に対応</span></label>
           <div id="charList"></div>
           <button class="addchar" id="addChar">＋ キャラ枠を追加</button>
+        </div>
+        <div class="field basefield">
+          <label>ベースプロンプト <span class="hint">― この構図で共通して使う本文（人数・構図・画風など）</span></label>
+          <textarea id="fCharBase" placeholder="2boys, side by side, masterpiece, best quality, ..."></textarea>
+          <button class="btn inlinecopy" id="copyCharBase" type="button">⧉ ベースプロンプトをコピー</button>
+          <label style="margin-top:12px;">ベースのネガティブ <span class="hint">― 全体共通のUndesired Content（任意）</span></label>
+          <textarea id="fCharBaseUC" placeholder="lowres, bad anatomy, ..." style="min-height:56px;"></textarea>
+          <button class="btn inlinecopy" id="copyCharBaseUC" type="button">⧉ ベースのネガティブをコピー</button>
         </div>
       </div>
 
@@ -449,19 +464,20 @@ function starsHTML(n){let s="";for(let i=1;i<=5;i++)s+=`<span class="${i<=n?'':'
 /* normalize legacy / imported records */
 function normalize(raw){
   const type=raw.type==="character"?"character":"base";
-  let chars=Array.isArray(raw.chars)?raw.chars.map(c=>({name:c.name||"",prompt:c.prompt||""})):null;
-  if(type==="character" && !chars) chars=[{name:"",prompt:raw.prompt||""}];
+  let chars=Array.isArray(raw.chars)?raw.chars.map(c=>({name:c.name||"",prompt:c.prompt||"",uc:c.uc||""})):null;
+  if(type==="character" && !chars) chars=[{name:"",prompt:raw.prompt||"",uc:raw.uc||""}];
   return{
     id:raw.id||uid(),type,title:raw.title||"",
-    prompt:raw.prompt||"",uc:raw.uc||"",chars:chars||[{name:"",prompt:""}],
+    prompt:raw.prompt||"",uc:raw.uc||"",chars:chars||[{name:"",prompt:"",uc:""}],
+    charBase:raw.charBase||"",charBaseUC:raw.charBaseUC||"",
     tags:Array.isArray(raw.tags)?raw.tags:[],rate:+raw.rate||0,fav:!!raw.fav,
     image:raw.image||null,memo:raw.memo||"",folder:raw.folder||null,
     created:raw.created||Date.now(),updated:raw.updated||Date.now()
   };
 }
 /* text used for preview + search */
-function bodyText(p){return p.type==="character"?(p.chars||[]).map(c=>c.prompt).filter(Boolean).join("  /  "):(p.prompt||"");}
-function searchText(p){return[p.title,bodyText(p),(p.tags||[]).join(" "),p.memo,(p.chars||[]).map(c=>c.name).join(" "),folderName(p.folder)].join(" ").toLowerCase();}
+function bodyText(p){if(p.type!=="character")return p.prompt||"";const cs=(p.chars||[]).map(c=>c.prompt).filter(Boolean).join("  /  ");return p.charBase?(cs?cs+"  ‖  "+p.charBase:p.charBase):cs;}
+function searchText(p){return[p.title,bodyText(p),(p.tags||[]).join(" "),p.memo,(p.chars||[]).map(c=>c.name+" "+(c.uc||"")).join(" "),p.charBaseUC||"",folderName(p.folder)].join(" ").toLowerCase();}
 
 /* ---------- filters ---------- */
 let F={search:"",type:"all",fav:false,tag:"",folder:"all",sort:"new"};
@@ -558,8 +574,21 @@ function openDetail(id){
       <div class="detail-slot">
         <div class="sname">${CIRCLED[i]||('#'+(i+1))} ${esc(c.name)||("キャラ枠"+(i+1))}</div>
         <div class="preview" style="max-height:none;font-size:12.5px;">${esc(c.prompt)}</div>
-        <button class="btn btn-primary" data-dcopy="${i}" style="font-size:13px;">⧉ このキャラ枠をコピー</button>
+        <button class="btn btn-primary" data-dcopy="${i}" style="font-size:13px;">⧉ プロンプトをコピー</button>
+        ${c.uc?`<div class="sname" style="margin-top:4px;">ネガティブ</div>
+        <div class="preview" style="max-height:none;font-size:12.5px;">${esc(c.uc)}</div>
+        <button class="btn" data-dcopyuc="${i}" style="font-size:13px;">⧉ ネガティブをコピー</button>`:""}
       </div>`).join("");
+    if(p.charBase||p.charBaseUC){
+      promptSection+=`<div class="detail-slot" style="border-color:var(--gold-line);">
+        <div class="sname" style="color:var(--ink);">ベースプロンプト</div>
+        ${p.charBase?`<div class="preview" style="max-height:none;font-size:12.5px;">${esc(p.charBase)}</div>
+        <button class="btn btn-primary" data-dcopy="cbase" style="font-size:13px;">⧉ ベースをコピー</button>`:""}
+        ${p.charBaseUC?`<div class="sname" style="margin-top:4px;color:var(--ink);">ベースのネガティブ</div>
+        <div class="preview" style="max-height:none;font-size:12.5px;">${esc(p.charBaseUC)}</div>
+        <button class="btn" data-dcopy="cbaseuc" style="font-size:13px;">⧉ ベースのネガティブをコピー</button>`:""}
+      </div>`;
+    }
   }else{
     promptSection=`<div class="field"><label>プロンプト</label><div class="preview" style="max-height:none;font-size:12.5px;">${esc(p.prompt)}</div>
       <button class="btn btn-primary" data-dcopy="base" style="width:100%;margin-top:8px;font-size:13px;">⧉ プロンプトをコピー</button></div>
@@ -581,8 +610,11 @@ function openDetail(id){
     const k=b.dataset.dcopy;
     if(k==="base")copyText(p.prompt||"");
     else if(k==="uc")copyText(p.uc||"");
+    else if(k==="cbase")copyText(p.charBase||"");
+    else if(k==="cbaseuc")copyText(p.charBaseUC||"");
     else copyText((p.chars[+k]||{}).prompt||"");
   });
+  body.querySelectorAll("[data-dcopyuc]").forEach(b=>b.onclick=()=>{copyText((p.chars[+b.dataset.dcopyuc]||{}).uc||"");});
   $("editFromDetail").onclick=()=>{closeOverlay("detailOverlay");openEditor(id);};
   openOverlay("detailOverlay");
 }
@@ -591,7 +623,7 @@ function openDetail(id){
 function readSlotsFromDOM(){
   const slots=[];
   $("charList").querySelectorAll(".charslot").forEach(el=>{
-    slots.push({name:el.querySelector(".slot-name").value.trim(),prompt:el.querySelector(".slot-prompt").value});
+    slots.push({name:el.querySelector(".slot-name").value.trim(),prompt:el.querySelector(".slot-prompt").value,uc:el.querySelector(".slot-uc").value});
   });
   return slots;
 }
@@ -604,8 +636,17 @@ function renderSlots(){
         ${draft.chars.length>1?`<button class="slot-del" data-del="${i}" aria-label="削除">×</button>`:""}
       </div>
       <input type="text" class="slot-name" placeholder="名前・役割（任意）例：ラヴェル" value="${esc(c.name)}">
+      <div class="slotlabel">プロンプト</div>
       <textarea class="slot-prompt" placeholder="1girl, silver hair, ...">${esc(c.prompt)}</textarea>
+      <div class="slotlabel">ネガティブプロンプト</div>
+      <textarea class="slot-uc" placeholder="bad hands, ..." style="min-height:52px;">${esc(c.uc||"")}</textarea>
+      <div class="slotcopy">
+        <button type="button" data-scopy="${i}">⧉ プロンプト</button>
+        <button type="button" data-scopyuc="${i}">⧉ ネガティブ</button>
+      </div>
     </div>`).join("");
+  list.querySelectorAll("[data-scopy]").forEach(b=>b.onclick=()=>{const v=readSlotsFromDOM()[+b.dataset.scopy];if(v)copyText(v.prompt||"");});
+  list.querySelectorAll("[data-scopyuc]").forEach(b=>b.onclick=()=>{const v=readSlotsFromDOM()[+b.dataset.scopyuc];if(v)copyText(v.uc||"");});
   list.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{draft.chars=readSlotsFromDOM();draft.chars.splice(+b.dataset.del,1);renderSlots();updateAddBtn();});
   updateAddBtn();
 }
@@ -635,7 +676,8 @@ function openEditor(id){
     $("modalTitle").textContent="標本を編集";$("delBtn").style.display="block";
     $("fTitle").value=p.title||"";$("fPrompt").value=p.prompt||"";$("fUC").value=p.uc||"";
     $("fTags").value=(p.tags||[]).join(", ");$("fMemo").value=p.memo||"";
-    draft.chars=(p.chars&&p.chars.length)?p.chars.map(c=>({name:c.name||"",prompt:c.prompt||""})):[{name:"",prompt:""}];
+    draft.chars=(p.chars&&p.chars.length)?p.chars.map(c=>({name:c.name||"",prompt:c.prompt||"",uc:c.uc||""})):[{name:"",prompt:"",uc:""}];
+    $("fCharBase").value=p.charBase||"";$("fCharBaseUC").value=p.charBaseUC||"";
     $("fFolder").value=p.folder||"";
     setRate(p.rate||0);setFav(!!p.fav);setImg(p.image||null);
     $("charList").innerHTML="";setType(p.type||"base");
@@ -643,7 +685,8 @@ function openEditor(id){
   }else{
     $("modalTitle").textContent="新規登録";$("delBtn").style.display="none";
     ["fTitle","fPrompt","fUC","fTags","fMemo"].forEach(f=>$(f).value="");
-    draft.chars=[{name:"",prompt:""}];$("charList").innerHTML="";
+    draft.chars=[{name:"",prompt:"",uc:""}];$("charList").innerHTML="";
+    $("fCharBase").value="";$("fCharBaseUC").value="";
     setRate(0);setFav(false);setImg(null);setType("base");
   }
   openOverlay("overlay");setTimeout(()=>$("fTitle").focus(),120);
@@ -653,9 +696,9 @@ async function saveEntry(){
   const title=$("fTitle").value.trim();
   const isChar=draft.type==="character";
   let chars=[];
-  if(isChar){chars=readSlotsFromDOM().filter(c=>c.prompt.trim()||c.name.trim());if(!chars.length)chars=[{name:"",prompt:""}];}
+  if(isChar){chars=readSlotsFromDOM().filter(c=>c.prompt.trim()||c.name.trim()||(c.uc||"").trim());if(!chars.length)chars=[{name:"",prompt:"",uc:""}];}
   const prompt=$("fPrompt").value.trim();
-  if(!title && !prompt && !(isChar&&chars.some(c=>c.prompt.trim()))){toast("プロンプトかタイトルを入れてね");return;}
+  if(!title && !prompt && !(isChar&&(chars.some(c=>c.prompt.trim())||$("fCharBase").value.trim()))){toast("プロンプトかタイトルを入れてね");return;}
   const tags=$("fTags").value.split(",").map(t=>t.trim()).filter(Boolean);
   const now=Date.now();
   let rec;
@@ -665,6 +708,8 @@ async function saveEntry(){
     type:draft.type,title,
     prompt:isChar?"":prompt,uc:isChar?"":$("fUC").value.trim(),
     chars:isChar?chars:[],
+    charBase:isChar?$("fCharBase").value.trim():"",
+    charBaseUC:isChar?$("fCharBaseUC").value.trim():"",
     tags,folder:$("fFolder").value||null,
     rate:draft.rate,fav:draft.fav,image:draft.image,memo:$("fMemo").value.trim(),updated:now
   });
@@ -754,9 +799,11 @@ function bind(){
   $("closeModal").onclick=$("cancelBtn").onclick=()=>closeOverlay("overlay");
   $("saveBtn").onclick=saveEntry;$("delBtn").onclick=deleteEntry;
   document.querySelectorAll("#typeSeg button").forEach(b=>b.onclick=()=>{if(draft.type==="character")draft.chars=readSlotsFromDOM();setType(b.dataset.t);});
-  $("addChar").onclick=()=>{draft.chars=readSlotsFromDOM();if(draft.chars.length<MAX_SLOTS){draft.chars.push({name:"",prompt:""});renderSlots();}};
+  $("addChar").onclick=()=>{draft.chars=readSlotsFromDOM();if(draft.chars.length<MAX_SLOTS){draft.chars.push({name:"",prompt:"",uc:""});renderSlots();}};
   $("fRate").querySelectorAll("span").forEach(s=>s.onclick=()=>setRate(+s.dataset.n===draft.rate?0:+s.dataset.n));
   $("fFav").onclick=()=>setFav(!draft.fav);
+  $("copyCharBase").onclick=()=>copyText($("fCharBase").value||"");
+  $("copyCharBaseUC").onclick=()=>copyText($("fCharBaseUC").value||"");
   $("pickImg").onclick=()=>$("imgInput").click();
   $("clearImg").onclick=()=>setImg(null);
   $("imgInput").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{setImg(await resizeImage(f));}catch(err){toast("画像を読み込めませんでした");}e.target.value="";};
